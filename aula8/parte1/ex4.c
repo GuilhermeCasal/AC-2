@@ -1,6 +1,14 @@
 #include <detpic32.h>
 
-    volatile int count=0;
+void _int_(4) isr_T1(void){
+    printStr("1\n");
+    IFS0bits.T1IF = 0;
+}
+
+void _int_(12) isr_T3(void){
+    printStr("3\n");
+    IFS0bits.T3IF = 0;
+}
 
 int main(void){
     T3CONbits.TCKPS = 5;    // 1:256 prescaler Fout_presc = 78125;
@@ -17,7 +25,7 @@ int main(void){
     IEC0bits.T3IE = 1;      // Enable timer T3 interrupts
     IFS0bits.T3IF = 0;      // Reset timer T3 interrupt flag 
 
-    IPC1bits.T1IP = 1;      // Interrupt priority 2
+    IPC1bits.T1IP = 2;      // Interrupt priority 2
     IEC0bits.T1IE = 1;      // Enable timer T3 interrupts
     IFS0bits.T1IF = 0;      // Reset timer T3 interrupt flag 
 
@@ -26,12 +34,5 @@ int main(void){
     return 0;
 }
 
-void _int_(4) isr_T1(void){
-    printInt("1\n");
-    IFS0bits.T1IF = 0;
-}
 
-void _int_(12) isr_T3(void){
-    printInt("3\n");
-    IFS0bits.T3IF = 0;
-}
+

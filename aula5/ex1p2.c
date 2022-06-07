@@ -12,8 +12,8 @@ void send2displays(unsigned char value){
     static char displayFlag = 0;
     char segment;
 
-    digit_high = value >> 4;
-    digit_low = value & 0x0F;
+    char digit_high = value >> 4;
+    char digit_low = value & 0x0F;
 
     if(displayFlag = 0){
         
