@@ -1,21 +1,21 @@
 #include <detpic32.h>
 
-void delay(int ms){
-    int k= 20000;
+void delay(unsigned int ms){
+    int k = 20000;
     resetCoreTimer();
-    while(readCoreTimer() < ms * k);
+    while(readCoreTimer() < k * ms); 
 }
 
-void putc(char byte2send){
+void putc(char byte){
     while(U2STAbits.UTXBF == 1);
-    U2TXREG = byte2send;
+    U2TXREG = byte;
 }
 
 int main(void){
 
     // Configure UART2                       
     U2BRG = 10;                 // U2BRG = (20Mhz / (16*115200))-1 ~ 10
-    U2MODEbits.PDSEL = 00;      // 00 = 8-bit data, no parity
+    U2MODEbits.PDSEL = 0b00;    // 00 = 8-bit data, no parity
     U2MODEbits.STSEL = 0;       // only 1 stop bit
     U2MODEbits.BRGH = 0;        // divide by 16
     U2STAbits.URXEN = 1;        // Enable Receiver
@@ -29,6 +29,7 @@ int main(void){
 
     return 0;
 }
+
 
 
 
