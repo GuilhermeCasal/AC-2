@@ -2,7 +2,16 @@
 
 void _int_(32) isr_uart2(void){
     if(IFS1bits.U2RXIF == 1){
-        putc(U2RXREG);        //Read character from FIFO(U2RXREG)
+
+        char k = U2RXREG;
+        
+        if(k == 'T'){
+            LATCbits.LATC14 = 1;
+        }else if(k == 't'){
+            LATCbits.LATC14 = 0;
+        }
+        
+        putc(k);        //Read character from FIFO(U2RXREG)
                                 //Send chararacter used to putc()
         IFS1bits.U2RXIF = 0;  //clear UART2 Rx interrupt flag
     }
@@ -14,7 +23,9 @@ void putc(char byte){
 }
 
 int main(void){
-    
+
+    TRISCbits.TRISC14 = 0;
+
    // Configure UART2: 115200, N, 8, 1
     U2BRG = 10;                 // U2BRG = (20Mhz / (16*115200))-1 ~ 10
     U2MODEbits.PDSEL = 0b00;      // 00 = 8-bit data, no parity
