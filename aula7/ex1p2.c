@@ -30,9 +30,9 @@ int main(void){
 
 void _int_(27) isr_adc(void){
     
-    LATD = LATE & 0xFBFF;
+    LATD = LATD & 0xFBFF;
     adc_value = ADC1BUF0;
-    LATD = LATE | 0x0800;
+    LATD = LATD | 0x0800;
     AD1CON1bits.ASAM = 1;       // Start conversion
     IFS1bits.AD1IF = 0;
 }
