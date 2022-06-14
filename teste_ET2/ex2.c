@@ -77,14 +77,14 @@ int main (void){
 
         int soma = 0;
         int *p = (int *) (&ADC1BUF0);
+        int i = 0;
 
-        for (int i = 0; i < 2; i++)
-        {
+        for(i = 0; i < 2; i++){
             soma += voltageConversion(p[i*4]); 
         }
         voltage = soma / 2;
 
-        IFS1bits.AD1IF = 0
+        IFS1bits.AD1IF = 0;
     }
 
     return 0;
