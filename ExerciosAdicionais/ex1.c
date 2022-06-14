@@ -1,5 +1,7 @@
 #include <detpic32.h>
 
+    volatile char value = 0x00;
+
 void send2displays(unsigned char value) {
     static const char display7Scodes[] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D,
                                           0x7D, 0x07, 0x7F, 0x6F, 0x77, 0x7C,
@@ -23,10 +25,9 @@ void send2displays(unsigned char value) {
     displayFlag = displayFlag ^ 1;
 }
 
-void delay(unsigned int ms){
-    int k = 20000;
-    resetCoreTimer();
-    while(readCoreTimer() < k * ms);
+void _int_ (8) isr_T2(void){
+    send2displays(value);
+    IFS0bits.T2IF = 0;
 }
 
 int main (void){
@@ -44,10 +45,31 @@ int main (void){
     TRISE = (TRISE & 0xFFF0);
     TRISD = (TRISD & 0xFF9F);
     TRISB = (TRISB & 0x80FF);
+    LATE = (LATE & 0x0000);
 
     EnableInterrupts();
     while(1){
-
+        char c = inkey();
+        if(c == '0'){
+            LATE = (LATE & 0xFFF0) | 0x0001;
+            value = 0;
+        }else if(c == '1'){
+            LATE = (LATE & 0xFFF0) | 0x0002;
+            value = 1;
+        }else if(c == '2'){
+            LATE = (LATE & 0xFFF0) | 0x0004;
+            value = 2;
+        }else if(c == '3'){
+            LATE = (LATE & 0xFFF0) | 0x0008;
+            value = 3;
+        }else{
+            LATE = LATE | 0x000F;
+            value = 0xFF;
+            resetCoreTimer();
+            while(readCoreTimer < 20000000);
+            value = 0;
+            LATE = (LATE & 0xFFF0);
+        }
     }
     return 0;
 }
