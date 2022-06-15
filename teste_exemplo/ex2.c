@@ -55,8 +55,8 @@ int main (void){
     AD1CHSbits.CH0SA = 4; // replace x by the desired input
     AD1CON1bits.ON = 1; // Enable A/D converter
    
-    T2CONbits.TCKPS = 2;
-	PR2 = 41666;
+    T2CONbits.TCKPS = 2;    //20000000/(65535*120)= 2,54 arredonda para 4;      (20000000/4)/(120)-1 = 41665
+	PR2 = 41665;
 	TMR2 = 0;
 	T2CONbits.TON = 1;
 
