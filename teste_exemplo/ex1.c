@@ -1,4 +1,4 @@
-#include <detpi32.h>
+#include <detpic32.h>
 
 void setPWM(unsigned int dutyCycle){
     if(dutyCycle > 0 && dutyCycle < 100){
@@ -13,7 +13,7 @@ int main (void){
     TMR2 = 0;
     T2CONbits.TON = 1;
 
-    IPC3bits.T2IP = 2;
+    IPC2bits.T2IP = 2;
     IEC0bits.T2IE = 1;
     IFS0bits.T2IF = 0;
 
@@ -46,4 +46,3 @@ int main (void){
     }
     return 0;
 }
-
