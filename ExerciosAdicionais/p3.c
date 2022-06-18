@@ -1,7 +1,7 @@
 #include <detpic32.h>
 
-    volatile int count = 15;
     volatile char k;
+    volatile int count = 15;
 
 void putc(char c){
     while(U2STAbits.UTXBF == 1);
@@ -15,25 +15,15 @@ void puts(char *str){
     }
 }
 
-void _int_(32) isr_uart(){ 
-    if(k == 'U'){
-        if(count == 16){
-            count = 0;
-        }
-    }     
-    if(k == 'R'){
-        count = 0;
-        puts("RESET");
-        putc('\n');
+void _int_(32) isr_uart(){
+    if(U2MODEbits.U2RXIF){
+            while(U2STAbits.URXDA == 1);
+            k = U2RXREG;
     }
-    count = (count & 0xFF) << 1;
-    LATE = (LATE & 0xFFE1) | count; 
-    count++;
-    IFS1bits.U2RXIF == 0;
-} 
+}
 
 int main(void){
-    //config timer 2
+
     U2BRG = ((20000000 + 8 * 9600) / (16 * 9600)) - 1;
     U2MODEbits.PDSEL = 0b10;
     U2MODEbits.STSEL = 1;
@@ -49,14 +39,22 @@ int main(void){
     TRISE = (TRISE & 0xFFE1);
 
     EnableInterrupts();
-    
+
     while(1){
-        if(IFS1bits.U2RXIF == 1){
-            while(U2STAbits.URXDA == 0);
-            k = U2RXREG;
+        if(k == 'U'){
+            if(count = 16){
+                count = 0;
+            }
         }
+        if(k == 'R'){
+            count = 0;
+            puts("RESET");
+        }
+        count = (count & 0xFF) << 1;
+        TRISE = (TRISE & 0xFFE1) | count;
+        count++;
+        IFS1bits.U2RXIF = 0;
     }
+
     return 0;
 }
-
-
